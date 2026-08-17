@@ -1,3 +1,11 @@
 Practice/
 *.class
 *.zip
+
+# Local environment/secret files - never commit these
+.env
+.env.local
+*.properties
+local.config
+db.config
+secrets.txt
