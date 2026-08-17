@@ -1,31 +1,26 @@
-import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ProxyStore {
-    public static HashMap<String,String> db = new HashMap<>();
+    public boolean authenticate(
+            Faculty faculty,
+            String password) {
 
-    public ProxyStore() {
-        db.put("demo", "demo");
-        db.put("demo1", "demo1");
-        db.put("demo2", "demo2");
-        db.put("demo3", "demo3");
-        db.put("demo4", "demo4");
-    }
+        String sql = "SELECT Password " + "FROM Faculty " + "WHERE FacultyID = ?";
 
-    public void register(Faculty faculty, String password) {
-        if(db.containsKey(faculty.getFacultyName())) {
-            System.out.println("User already exists.");
-        } else {
-            db.put(faculty.getFacultyName(), password);
+        try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, faculty.getFacultyId());
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                String storedPassword = result.getString("Password");
+                return storedPassword.equals(password);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    }
 
-    public static boolean authenticate(Faculty faculty, String password) {
-        if(!db.containsKey(faculty.getFacultyName())) {
-            return false;   
-        } else if(!db.get(faculty.getFacultyName()).equals(password)) {
-            return false;
-        } else {
-            return true;
-        }
+        return false;
     }
 }

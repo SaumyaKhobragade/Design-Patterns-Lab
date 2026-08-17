@@ -4,7 +4,6 @@ public class LeaveManagementSystem {
     private static LeaveCoordinator coordinator;
 
     private LeaveManagementSystem() {
-
     }
 
     public static LeaveManagementSystem getInstance() {
@@ -37,6 +36,7 @@ public class LeaveManagementSystem {
             System.out.println("Invalid leave request.");
             return;
         }
+
         entryPoint.approveLeave(leave);
     }
 
@@ -51,11 +51,16 @@ public class LeaveManagementSystem {
 
     private static void setupCoordinator() {
         LeaveDAO leaveDAO = new LeaveDAO();
-        LeaveCoordinator leaveCoordinator = new LeaveCoordinator();
-        HRDepartment hr = new HRDepartment(leaveDAO);
-        AccountsDepartment accounts = new AccountsDepartment();
+        HRDAO hrDAO = new HRDAO();
+        AccountsDAO accountsDAO = new AccountsDAO();
+
+        LeaveCoordinator leaveCoordinator = new LeaveCoordinator(leaveDAO, hrDAO, accountsDAO);
+        HRDepartment hr = new HRDepartment();
+        AccountsDepartment accounts = new AccountsDepartment(accountsDAO);
+
         leaveCoordinator.registerObserver(hr);
         leaveCoordinator.registerObserver(accounts);
+
         setCoordinator(leaveCoordinator);
     }
 }

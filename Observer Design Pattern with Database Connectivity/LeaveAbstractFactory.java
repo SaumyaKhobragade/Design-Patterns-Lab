@@ -1,7 +1,5 @@
 public class LeaveAbstractFactory {
-
-    public static Leave getLeave(Leave leave, Faculty faculty, int days) {
-
+    public static Leave getLeave(String leaveType, Faculty faculty, int days) {
         LeaveFactory factory;
 
         if (faculty instanceof PermanentFaculty) {
@@ -12,6 +10,6 @@ public class LeaveAbstractFactory {
             return null;
         }
 
-        return factory.getLeave(leave, faculty, days);
+        return factory.getLeave(leaveType, faculty, days);
     }
 }

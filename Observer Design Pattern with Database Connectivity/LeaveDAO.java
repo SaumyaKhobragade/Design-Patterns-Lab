@@ -7,7 +7,9 @@ public class LeaveDAO {
     public int createLeave(Leave leave) {
         String sql = "INSERT INTO LeaveRequest " + "(FacultyID, Days, LeaveType, Status) " + "VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql,
+                        java.sql.Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, leave.getFaculty().getFacultyId());
             statement.setInt(2, leave.getDays());
             statement.setString(3, leave.getLeaveType());
@@ -34,7 +36,8 @@ public class LeaveDAO {
     public void getLeave(int leaveId) {
         String sql = "SELECT * FROM LeaveRequest " + "WHERE LeaveID = ?";
 
-        try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, leaveId);
             ResultSet result = statement.executeQuery();
 
@@ -56,7 +59,8 @@ public class LeaveDAO {
     public void updateLeaveStatus(int leaveId, String status) {
         String sql = "UPDATE LeaveRequest " + "SET Status = ? " + "WHERE LeaveID = ?";
 
-        try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, status);
             statement.setInt(2, leaveId);
             int rows = statement.executeUpdate();
@@ -75,7 +79,8 @@ public class LeaveDAO {
     public void deleteLeave(int leaveId) {
         String sql = "DELETE FROM LeaveRequest " + "WHERE LeaveID = ?";
 
-        try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, leaveId);
             int rows = statement.executeUpdate();
 
@@ -83,6 +88,19 @@ public class LeaveDAO {
                 System.out.println("Leave request " + leaveId + " deleted.");
             } else {
                 System.out.println("Leave request not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllLeaves() {
+        String sql = "SELECT * FROM LeaveRequest";
+    
+        try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql); ResultSet result = statement.executeQuery()) {
+            System.out.println("\n--- All Leave Requests ---");
+            while (result.next()) {
+                System.out.println("ID: " + result.getInt("LeaveID") + " | Faculty: " + result.getInt("FacultyID") + " | Type: " + result.getString("LeaveType") + " | Days: " + result.getInt("Days") + " | Status: " + result.getString("Status"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

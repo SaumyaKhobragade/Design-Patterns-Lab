@@ -3,6 +3,9 @@ public abstract class Leave {
     private final String leaveType;
     private final Faculty faculty;
     private final int days;
+    private int freeLeaveDays;
+    private int unpaidLeaveDays;
+    private int salaryDeduction;
 
     protected Notification notification;
 
@@ -40,6 +43,30 @@ public abstract class Leave {
 
     public int getDays() {
         return days;
+    }
+
+    public int getFreeLeaveDays() {
+        return freeLeaveDays;
+    }
+
+    public void setFreeLeaveDays(int freeLeaveDays) {
+        this.freeLeaveDays = freeLeaveDays;
+    }
+
+    public int getUnpaidLeaveDays() {
+        return unpaidLeaveDays;
+    }
+
+    public void setUnpaidLeaveDays(int unpaidLeaveDays) {
+        this.unpaidLeaveDays = unpaidLeaveDays;
+    }
+
+    public int getSalaryDeduction() {
+        return salaryDeduction;
+    }
+
+    public void setSalaryDeduction(int salaryDeduction) {
+        this.salaryDeduction = salaryDeduction;
     }
 
     abstract void leave();
